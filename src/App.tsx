@@ -3,6 +3,9 @@ import '@aws-amplify/ui-react/styles.css'
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import TodoCard from './components/TodoCard';
+import NetHousingMenu from './components/Menu';
+import { Heading, Text } from '@aws-amplify/ui-react';
 
 const client = generateClient<Schema>();
 
@@ -27,15 +30,14 @@ function App() {
     <Authenticator>
       {({ signOut, user }) => (
       <main>
-        <h1>{user?.signInDetails?.loginId}'s todos</h1>
+        <NetHousingMenu></NetHousingMenu>
+        <Heading width='30vw' level={3}>Casas de {user?.signInDetails?.loginId}</Heading>
         <button onClick={createTodo}>+ new</button>
-        <ul>
-          {todos.map((todo) => <li
-            onClick={() => deleteTodo(todo.id)}
-            key={todo.id}>
-            {todo.content}
-          </li>)}
-        </ul>
+        <div>
+          {todos.map((todo) => (
+            <TodoCard key={todo.id} todo={todo} />
+          ))}
+        </div>
         <div>
           🥳 App successfully hosted. Try creating a new todo.
           <br />
