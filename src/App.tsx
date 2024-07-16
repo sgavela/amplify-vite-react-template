@@ -5,7 +5,7 @@ import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import TodoCard from './components/TodoCard';
 import NetHousingMenu from './components/Menu';
-import { Heading, Text } from '@aws-amplify/ui-react';
+import { Heading } from '@aws-amplify/ui-react';
 
 const client = generateClient<Schema>();
 
@@ -22,9 +22,6 @@ function App() {
     client.models.Todo.create({ type: window.prompt("Todo content") });
   }
  
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id })
-  }
 
   return (
     <Authenticator>

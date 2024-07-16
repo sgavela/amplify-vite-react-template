@@ -12,9 +12,6 @@ import {
     useTheme,
   } from '@aws-amplify/ui-react';
 
-const client = generateClient<Schema>();
-
-
 interface TodoCardProps {
     todo: Schema["Todo"]["type"];
   }
