@@ -52,7 +52,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ todo }) => {
                 </Heading>
 
                 <Text as="span">
-                {todo.content}
+                {todo.type}
                 </Text>
                 <Button variation="primary">Book it</Button>
             </Flex>
