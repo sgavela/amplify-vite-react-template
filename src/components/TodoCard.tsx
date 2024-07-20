@@ -1,4 +1,5 @@
 import { type Schema } from '../../amplify/data/resource';
+import { generateClient } from "aws-amplify/data";
 import {
     Card,
     Image,
@@ -11,53 +12,67 @@ import {
     useTheme,
   } from '@aws-amplify/ui-react';
 
+const client = generateClient<Schema>();
+
+function deleteTodo(todo: Schema["Todo"]["type"]) {
+    client.models.Todo.delete({ id: todo.id });
+}
+
 interface TodoCardProps {
     todo: Schema["Todo"]["type"];
-  }
+}
   
 const TodoCard: React.FC<TodoCardProps> = ({ todo }) => {
     const { tokens } = useTheme();
     return (
         <View
-        backgroundColor={tokens.colors.background.secondary}
-        padding={tokens.space.medium}
+            backgroundColor={tokens.colors.background.secondary}
+            padding={tokens.space.medium}
         >
-        <Card backgroundColor={tokens.colors.primary[20]}>
-            <Flex direction="row" alignItems="flex-start">
-            <Image
-                alt="Road to milford sound"
-                src="/road-to-milford-new-zealand-800w.jpg"
-                width="33%"
-            />
-            <Flex
-                direction="column"
-                alignItems="flex-start"
-                gap={tokens.space.xs}
+            <Card
+                backgroundColor={tokens.colors.primary[20]}
+                position="relative" 
+                padding={tokens.space.medium}
             >
-                <Flex>
-                <Badge size="small" variation="info">
-                    Plus
-                </Badge>
-                <Badge size="small" variation="success">
-                    Verified
-                </Badge>
+                <Flex direction="row" alignItems="flex-start">
+                    <Image
+                        alt="Road to milford sound"
+                        src="../assets/house1.jpg"
+                        width="20%"
+                    />
+                    <Flex
+                        direction="column"
+                        alignItems="flex-start"
+                        gap={tokens.space.xs}
+                        flex="1"
+                    >
+                        <Heading level={3}>
+                            {todo.type}
+                        </Heading>
+                        <Heading level={4}>
+                            {todo.location}
+                        </Heading>
+                        <Heading level={5}>
+                            {todo.description}
+                        </Heading>
+                    </Flex>
                 </Flex>
-
-                <Heading level={5}>
-                {todo.id}
-                </Heading>
-
-                <Text as="span">
-                {todo.type}
-                </Text>
-                <Button variation="primary">Book it</Button>
-            </Flex>
-            </Flex>
-        </Card>
+                <Button
+                    variation="primary"
+                    colorTheme="error"
+                    onClick={() => deleteTodo(todo)}
+                    position="absolute"
+                    bottom={tokens.space.medium} 
+                    right={tokens.space.medium}
+                >
+                    Borrar casa
+                </Button>
+            </Card>
         </View>
     );
 };
   
 export default TodoCard;
+
 
 

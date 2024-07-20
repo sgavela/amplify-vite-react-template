@@ -1,52 +1,56 @@
-import { Authenticator } from '@aws-amplify/ui-react'
-import '@aws-amplify/ui-react/styles.css'
-import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
-import TodoCard from './components/TodoCard';
-import NetHousingMenu from './components/Menu';
-import { Heading } from '@aws-amplify/ui-react';
+import MyHousesPage from './pages/MyHousesPage';
+import HomePage from './pages/HomePage';
+import NewHousePage from './pages/NewHousePage';
 
-const client = generateClient<Schema>();
+import { Menu, MenuItem, View } from '@aws-amplify/ui-react';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useNavigate
+} from 'react-router-dom';
+
+function NavigationMenu() {
+    const navigate = useNavigate(); 
+
+    const goHome = () => {
+        navigate("/"); 
+    };
+    const goMyHouses = () => {
+        navigate("/my-houses");
+    };
+
+    return (
+        <View width="4rem">
+            <Menu>
+                <MenuItem onClick={goHome}>
+                    Home
+                </MenuItem>
+                <MenuItem onClick={goMyHouses}>
+                    Mis casas
+                </MenuItem>
+                <MenuItem onClick={() => alert("No se puede, pero se podrá :)")}>
+                    Mi perfil
+                </MenuItem>
+                <MenuItem onClick={() => alert("No se puede, pero se podrá :)")}>
+                    Cerrar sesión
+                </MenuItem>
+            </Menu>
+        </View>
+    );
+}
 
 function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({ type: window.prompt("Todo content") });
-  }
- 
-
-  return (
-    <Authenticator>
-      {({ signOut, user }) => (
-      <main>
-        <NetHousingMenu></NetHousingMenu>
-        <Heading width='30vw' level={3}>Casas de {user?.signInDetails?.loginId}</Heading>
-        <button onClick={createTodo}>+ new</button>
-        <div>
-          {todos.map((todo) => (
-            <TodoCard key={todo.id} todo={todo} />
-          ))}
-        </div>
-        <div>
-          🥳 App successfully hosted. Try creating a new todo.
-          <br />
-          <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-            Review next step of this tutorial.
-          </a>
-        </div>
-        <button onClick={signOut}>Sign out</button>
-      </main>  
-    )}
-    </Authenticator>
-  );
-}
+    return(
+        <Router>
+            <NavigationMenu/>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/my-houses" element={<MyHousesPage />} />
+                <Route path="/new-house" element={<NewHousePage />} />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
